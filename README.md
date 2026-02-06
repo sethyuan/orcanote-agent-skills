@@ -1,3 +1,5 @@
+[中文 README](./README.zh.md)
+
 # orcanote-agent-skills
 
 Agents and skills for Orca Note.
