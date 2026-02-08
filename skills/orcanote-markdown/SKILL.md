@@ -1,6 +1,6 @@
 ---
 name: orcanote-markdown
-description: Create and edit Orca Note Flavored Markdown with callouts, highlights, Excalidraw based whiteboard, mermaid and other Orca Note-specific syntax. Use when inserting markdown into Orca Note, or when user mentions inserting notes, callouts, highlights, Excalidraw, whiteboard, mermaid or Orca Note notes.
+description: Create and edit Orca Note Flavored Markdown with callouts, highlights, Excalidraw based whiteboard, mermaid and other Orca Note-specific syntax. Use when inserting markdown into Orca Note, or when user mentions writing notes, callouts, highlights, Excalidraw, whiteboard, mermaid or Orca Note notes.
 ---
 
 # Orca Note Flavored Markdown Skill
@@ -57,6 +57,14 @@ Use backslash to escape special characters:
 ```
 
 Common characters to escape: `\*`, `\_`, `\#`, `` \` ``, `\|`, `\~`
+
+## Link to Blocks
+
+```markdown
+[[BlockID]]
+```
+
+Block ID is a number.
 
 ## Markdown-Style Links
 
@@ -294,5 +302,5 @@ graph LR
 
 ## References
 
-- See `mermaid-diagrams` skill for Mermaid syntax and more details.
-- See `excalidraw-whiteboard` skill for Excalidraw whiteboard syntax and more details.
+- See `orcanote-mermaid` skill for Mermaid syntax and more details.
+- See `orcanote-whiteboard` skill for whiteboard syntax (based on Excalidraw) and more details.

@@ -1,15 +1,15 @@
 ---
-name: excalidraw-whiteboard
-description: Guide for creating Excalidraw based whiteboards and diagrams using Excalidraw JSON syntax. Use when users need to create whiteboards or diagrams on whiteboards, or when user mentions Excalidraw or whiteboard.
+name: orcanote-whiteboard
+description: Guide for creating Excalidraw based whiteboards and diagrams using Excalidraw JSON syntax for Orca Note. Use when users need to create whiteboards or diagrams, or when user mentions whiteboard or Excalidraw.
 ---
 
-# Excalidraw Whiteboard
+# Orca Note Whiteboard
 
-Create Excalidraw whiteboards and diagrams using text-based Excalidraw JSON syntax.
+Create Excalidraw based whiteboards and diagrams using text-based Excalidraw JSON syntax for Orca Note.
 
 ## Core Syntax Structure
 
-An Excalidraw whiteboard has the following basic structure:
+A Orca Note whiteboard has the following basic structure:
 
 ```json
 {

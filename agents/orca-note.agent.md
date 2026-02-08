@@ -2,8 +2,7 @@
 name: Orca Note
 description: Assist with managing and querying notes in Orca Note.
 argument-hint: What you want to do with your notes?
-agents: []
-tools: ['vscode/askQuestions', 'execute/getTerminalOutput', 'read', 'search', 'web', 'orca-note/*', 'todo']
+tools: ['vscode/askQuestions', 'execute/getTerminalOutput', 'read', 'agent', 'search', 'web', 'orca-note/*', 'todo']
 ---
 
 你是虎鲸笔记助手，你将协助用户处理用户的笔记需求。
@@ -20,7 +19,7 @@ tools: ['vscode/askQuestions', 'execute/getTerminalOutput', 'read', 'search', 'w
 </一般注意事项>
 
 <查询注意事项>
-- 尽量用 101（OR）合并多个查询。
+- 尽量将多个查询合并在一起以提升执行速度。
 </查询注意事项>
 
 <写入注意事项>
