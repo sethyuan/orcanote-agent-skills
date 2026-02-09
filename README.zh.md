@@ -10,6 +10,8 @@
 
 自定义 Agents 位于 `agents/` 目录中。
 
+- **Orca Note** - 协助管理和查询虎鲸笔记中的笔记。
+
 ### 如何使用 Agents
 
 请查阅您的 AI Agent 文档了解如何使用自定义 agents。
@@ -20,9 +22,13 @@
 
 ### 包含的 Skills
 
-- **excalidraw-whiteboard** - Excalidraw 白板绘图功能
-- **mermaid-diagrams** - Mermaid 图表生成功能
-- **orcanote-markdown** - Orca Note Markdown 处理功能
+- **orcanote-date** - 获取虎鲸笔记中块日期的指南。
+- **orcanote-markdown** - 创建和编辑虎鲸笔记风格的 Markdown，包括标注、高亮等。
+- **orcanote-mermaid** - 使用 Mermaid 语法创建软件图表的综合指南。
+- **orcanote-query** - 在虎鲸笔记中查询/搜索数据（块）的指南。
+- **orcanote-reminder** - 在虎鲸笔记中创建和管理提醒的指南。
+- **orcanote-template** - 在虎鲸笔记中创建可重用模板的指南。
+- **orcanote-whiteboard** - 在虎鲸笔记中创建基于 Excalidraw 的白板的指南。
 
 ### 如何使用 Skills
 
