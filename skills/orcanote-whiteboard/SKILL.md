@@ -1,295 +1,241 @@
 ---
 name: orcanote-whiteboard
-description: Guide for creating Excalidraw based whiteboards and diagrams using Excalidraw JSON syntax for Orca Note. Use when users need to create whiteboards or diagrams, or when user mentions whiteboard or Excalidraw.
+description: Guide for creating Excalidraw-based whiteboards in Orca Note. Use when user mentions whiteboard or Excalidraw.
 ---
 
-# Orca Note Whiteboard
+# Orca Note Whiteboard (Excalidraw)
 
-Create Excalidraw based whiteboards and diagrams using text-based Excalidraw JSON syntax for Orca Note.
+This skill provides the syntax, structural rules, and design principles for creating semantically rich and visually appealing whiteboards in Orca Note using the Excalidraw JSON format.
 
-## Core Syntax Structure
+## Excalidraw JSON Schema
 
-A Orca Note whiteboard has the following basic structure:
+Whiteboards are defined within `whiteboard` code blocks.
+
+### Core Structure
 
 ```json
 {
-  "type": "excalidraw",
-  "version": 2,
-  "source": "https://excalidraw.com",
-  "elements": [...],
+  "elements": [],
   "files": {}
 }
 ```
 
-## Diagram Type Selection Guide
+### Common Element Types
 
-**Choose the right diagram type:**
+| Type | Description | Key Fields |
+| :--- | :--- | :--- |
+| `rectangle` | Standard rectangle | `x, y, width, height, strokeColor, backgroundColor, roundness, boundElements` |
+| `ellipse` | Circle or oval | `x, y, width, height, strokeColor, backgroundColor, boundElements` |
+| `arrow` | Line or connector | `points` (relative to `x,y`), `startArrowhead`, `endArrowhead`, `startBinding`, `endBinding`, `elbowed` (true for elbow arrows) |
+| `line` | Simple line | `points` |
+| `text` | Text label | `text`, `fontSize`, `fontFamily` (5: Hand-drawn, 6: Sans, 8: Monospace), `containerId` (ID of the shape this text belongs to), `x, y, width, height, strokeColor, backgroundColor`, `textAlign`, `verticalAlign` |
+| `embeddable` | Embedded Orca Note block | `customData: { "blockId": "ID" }`, `x, y, width, height, strokeColor, backgroundColor, roundness` |
 
-| Type | Use Case | How to |
-|------|---------|--------|
-| **Flowchart** | Step-by-step procedures, workflows, task sequences | Connect steps with arrows to clearly show process direction |
-| **Mind Map** | Idea expansion, topic categorization, brainstorming | Start from a central node and radiate outward with branches |
-| **Hierarchy** | Organizational charts, content hierarchies, system breakdowns | Arrange nodes top-down or left-to-right to show levels |
-| **Relationship** | Dependencies, influences, or interactions between elements | Use lines and arrows between shapes; add labels or annotations |
-| **Comparison** | Comparing two or more options or perspectives | Use side-by-side columns or tables and label comparison dimensions |
-| **Timeline** | Event progression, project schedules, model evolution | Use a time axis to mark key dates and milestones |
-| **Matrix** | Two-dimensional classification, task prioritization, positioning | Create X and Y axes and place items within the coordinate plane |
-| **Freeform** | Loose content, idea capture, preliminary information gathering | Place items freely without strict structure; use shapes and arrows as needed |
+### Labeling Shapes with Text
 
-## Quick Start Example
+To place text inside a shape (like a rectangle or ellipse):
+1.  **Create the Shape**: Give it a unique `id`.
+2.  **Create a Text Element**:
+    - Set its `containerId` to the shape's `id`.
+    - Set `x` and `y` to the container's `x` and `y`.
+    - Set `width` and `height` to fit within the shape's dimensions.
+    - Set `textAlign` and `verticalAlign` to center the text.
+3.  **Link back**: Add the text element's ID to the shape's `boundElements` array: `{ "type": "text", "id": "text_id" }`.
 
+### Arrow Types
+- **Straight Arrow**: Standard line. No `elbowed` field.
+- **Elbow Arrow**: Set `elbowed: true`. This creates a right-angled connector.
+
+#### Arrowheads (`startArrowhead` / `endArrowhead`)
+- `null`: No arrowhead.
+- `"arrow"`, `"bar"`, `"dot"`, `"triangle"`.
+
+### Arrow Connection / Connecting Two Elements
+To link two shapes (e.g., A and B) via an arrow:
+1.  **On the Arrow**: Define `startBinding: { "elementId": "A", "fixedPoint": [1, 0.5] }` and `endBinding: { "elementId": "B", "fixedPoint": [0, 0.5] }`.
+2.  **On the Shapes**: Add `{ "id": "arrow_id", "type": "arrow" }` to the `boundElements` array of both Shape A and Shape B.
+
+`fixedPoint` is a tuple of [x, y] where x and y are between 0 and 1, representing the relative position on the shape's boundary (0,0 is top-left, 1,1 is bottom-right). For example:
+- `fixedPoint: [1, 0.5]` means the arrow starts at the middle of the right edge of Shape A.
+- `fixedPoint: [0, 0.5]` means the arrow ends at the middle of the left edge of Shape B.
+
+**Example Connection with Text labels:**
 ```json
 {
-  "type": "excalidraw",
-  "version": 2,
-  "source": "https://excalidraw.com",
   "elements": [
     {
-      "id": "3P2z4qSfdQj6cd0ahkJfC",
+      "id": "shape-a",
       "type": "rectangle",
-      "x": -244.12890575,
-      "y": -114.09765575,
-      "width": 113.40625,
-      "height": 60.93359375,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 0,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "index": "a0",
-      "roundness": null,
-      "seed": 999077125,
-      "version": 109,
-      "versionNonce": 705510059,
-      "isDeleted": false,
+      "x": 100, "y": 100, "width": 100, "height": 50,
       "boundElements": [
-        {
-          "id": "oUQQ9gFoB_w-SoZah8p1L",
-          "type": "arrow"
-        }
-      ],
-      "updated": 1770382887653,
-      "link": null,
-      "locked": false
+        { "id": "text-a", "type": "text" },
+        { "id": "link-1", "type": "arrow" }
+      ]
     },
     {
-      "id": "ctAQl2UvB6bA3MvwBTm0-",
+      "id": "text-a",
       "type": "text",
-      "x": -240.304687,
-      "y": -143.6562495,
-      "width": 31.167984008789062,
-      "height": 21.6,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 0,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "index": "a1",
-      "roundness": null,
-      "seed": 1269773957,
-      "version": 46,
-      "versionNonce": 1809895691,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1770382871766,
-      "link": null,
-      "locked": false,
-      "text": "Text",
-      "fontSize": 16,
+      "x": 100, "y": 100, "width": 50, "height": 20,
       "fontFamily": 6,
-      "textAlign": "left",
-      "verticalAlign": "top",
-      "containerId": null,
-      "originalText": "Text",
-      "autoResize": true,
-      "lineHeight": 1.35
+      "fontSize": 16,
+      "text": "Start",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "shape-a"
     },
     {
-      "type": "embeddable",
-      "link": "Go to",
-      "customData": {
-        "blockId": 430
-      },
-      "validated": true,
-      "backgroundColor": "transparent",
-      "strokeWidth": 2,
-      "roughness": 0,
-      "width": 300,
-      "height": 260,
-      "x": 12.1875,
-      "y": -228.410156,
-      "version": 170,
-      "versionNonce": 1920519147,
-      "index": "a2",
-      "isDeleted": false,
-      "id": "rT8agR-ZtM-CLnyzh9ydl",
-      "fillStyle": "solid",
-      "strokeStyle": "solid",
-      "opacity": 100,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "seed": 1,
-      "groupIds": [],
-      "frameId": null,
-      "roundness": null,
+      "id": "shape-b",
+      "type": "ellipse",
+      "x": 400, "y": 100, "width": 100, "height": 50,
       "boundElements": [
-        {
-          "id": "oUQQ9gFoB_w-SoZah8p1L",
-          "type": "arrow"
-        }
-      ],
-      "updated": 1770382887654,
-      "locked": false
+        { "id": "text-b", "type": "text" },
+        { "id": "link-1", "type": "arrow" }
+      ]
     },
     {
-      "id": "oUQQ9gFoB_w-SoZah8p1L",
+      "id": "text-b",
+      "type": "text",
+      "x": 400, "y": 100, "width": 50, "height": 20,
+      "fontFamily": 6,
+      "fontSize": 16,
+      "text": "End",
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "shape-b"
+    },
+    {
+      "id": "link-1",
       "type": "arrow",
-      "x": -125.72265575,
-      "y": -83.730858875,
-      "width": 129.0312495,
-      "height": 0.3394536250000044,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
-      "fillStyle": "solid",
-      "strokeWidth": 2,
-      "strokeStyle": "solid",
-      "roughness": 0,
-      "opacity": 100,
-      "groupIds": [],
-      "frameId": null,
-      "index": "a3",
-      "roundness": null,
-      "seed": 959749797,
-      "version": 104,
-      "versionNonce": 1837542731,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1770382887654,
-      "link": null,
-      "locked": false,
-      "points": [
-        [
-          0,
-          0
-        ],
-        [
-          129.0312495,
-          -0.3394536250000044
-        ]
-      ],
-      "lastCommittedPoint": null,
-      "startBinding": {
-        "elementId": "3P2z4qSfdQj6cd0ahkJfC",
-        "fixedPoint": [
-          1.044089280793607,
-          0.4983588691582795
-        ],
-        "focus": 0,
-        "gap": 0
-      },
-      "endBinding": {
-        "elementId": "rT8agR-ZtM-CLnyzh9ydl",
-        "fixedPoint": [
-          -0.02959635416666667,
-          0.5551532442307693
-        ],
-        "focus": 0,
-        "gap": 0
-      },
-      "startArrowhead": null,
+      "x": 200, "y": 125,
+      "points": [[0, 0], [200, 0]],
+      "startBinding": { "elementId": "shape-a", "fixedPoint": [1, 0.5] },
+      "endBinding": { "elementId": "shape-b", "fixedPoint": [0, 0.5] },
       "endArrowhead": "triangle",
-      "elbowed": true,
-      "fixedSegments": null,
-      "startIsSpecial": null,
-      "endIsSpecial": null
+      "elbowed": true
     }
-  ],
-  "files": {}
+  ]
 }
 ```
 
-## Design Rules
+## Embedding Orca Note Blocks
 
-### Layout & Design
+To reference and display an existing Orca Note block inside a whiteboard, use the `embeddable` type. Note that embedded blocks have no associated text element for labeling.
 
-- **Element Spacing**: Ensure appropriate spacing for a visually pleasing layout
-- **Clear Hierarchy**: Use different colors and shapes to distinguish information levels
-- **Graphic Elements**: Use rectangles, circles, arrows, etc. to organize information
-- **No Emoji**: Do not use any Emoji symbols in diagram text; use simple shapes (circles, squares, arrows) or colors for visual markers
+### Implementation
+- **type**: `embeddable`
+- **customData**: Must contain `blockId` mapping to the target block's ID (number).
+- **validated**: Must be true.
+- **link**: String of value "go to".
 
-### Theming & Colors
-
-Use harmonious color schemes and avoid excessive colors.
-
-## Element Template
-
-### Required Fields for All Elements
-
-```json
-{
-  "id": "unique-identifier",
-  "type": "rectangle|text|arrow|ellipse|diamond",
-  "x": 100, "y": 100,
-  "width": 200, "height": 50,
-  "angle": 0,
-  "strokeColor": "#color-hex",
-  "backgroundColor": "transparent|#color-hex",
-  "fillStyle": "solid",
-  "strokeWidth": 2,
-  "strokeStyle": "solid|dashed",
-  "roughness": 1,
-  "opacity": 100,
-  "groupIds": [],
-  "frameId": null,
-  "index": "a1",
-  "roundness": {"type": 3},
-  "seed": 123456789,
-  "version": 1,
-  "versionNonce": 987654321,
-  "isDeleted": false,
-  "boundElements": [],
-  "updated": 1751928342106,
-  "link": null,
-  "locked": false
-}
-```
-
-### Block Elements
-
-Elements that represent blocks has the type "embeddable" and an extra `customData` field:
-
+### Example
 ```json
 {
   "id": "block-1",
   "type": "embeddable",
+  "x": 100,
+  "y": 100,
+  "width": 300,
+  "height": 200,
   "customData": {
-    "blockId": 123
+    "blockId": 88234
   },
-  ...
+  "validated": true,
+  "link": "go to"
 }
 ```
 
-See [references/excalidraw-schema.md](references/excalidraw-schema.md) for all element types.
+## Layout Guidance
 
-## Detailed References
+Good layout uses **Proximity** to imply relationship and **White Space** to denote separation.
 
-- Excalidraw Schema: [references/excalidraw-schema.md](references/excalidraw-schema.md)
+### 1. Mind Map
+- **Structure**: A central "Root" node with radial or hierarchical branching.
+- **Visual Grouping**:
+  - Keep sub-topics within 50-100 pixels of their parent.
+  - Leave at least 200 pixels between major branches to avoid overlap.
+  - **Hierarchy**: Use larger font sizes (e.g., `fontSize: 28`) for the root and smaller (e.g., `fontSize: 16`) for leaf nodes.
+- **Example Pattern**:
+  - Center: Rectangle (`backgroundColor: "#1d3557"`, `text: "Goal"`, `strokeColor: "#ffffff"`).
+  - Branches: Curved arrows linking to smaller rectangles with thinner strokes.
 
-## Additional Technical Requirements
+### 2. Relationship Map (Clue Wall)
+- **Structure**: A non-linear web of interconnected entities (blocks, notes, images).
+- **Visual Grouping**:
+  - **Cluster Mapping**: Place semantically similar elements (e.g., all "Evidence" blocks) in a tight spatial cluster.
+  - **Guttering**: Ensure unrelated clusters are separated by a "dead zone" of at least 300 pixels.
+  - **Connector Contrast**: Use `strokeStyle: "solid"` for direct evidence and `"dashed"` for speculative links.
+- **Visual Hierarchy**: Highlight key "anchor" blocks by giving them a `strokeWidth: 4` or a distinct `backgroundColor`.
 
-### Coordinates & Layout
+## Styling & Color Themes
 
-- **Coordinate system**: origin at the top-left corner (0, 0)
-- **Element ID**: each element must have a unique `id` (can be a string, e.g., "title", "box1")
-- **Index field**: recommended to use alphanumeric values (a1, a2, a3...)
+Color and style should be used semantically to reduce cognitive load.
+
+### 1. Font Sizes
+Choose ONLY from the following 4 font sizes:
+- `fontSize: 16` (Small)
+- `fontSize: 20` (Medium)
+- `fontSize: 28` (Large)
+- `fontSize: 36` (Extra Large)
+
+### 1. Style Variations
+- **Professional**:
+  - `roughness: 0`, `fontFamily: 6`, `roundness: null` (sharp corners) or `type: 2`.
+  - Best for: Technical diagrams, architecture, formal reports.
+- **Hand-drawn**:
+  - `roughness: 1.5`, `fontFamily: 5`, `roundness: { type: 3 }`.
+  - Best for: Brainstorming, user journey maps, creative storytelling.
+
+### 2. Semantic Color Palettes
+Assign colors based on the role of the element:
+
+| Role | Professional Palette | Hand-drawn Palette |
+| :--- | :--- | :--- |
+| **Core Concept** | Deep Blue (#003049) | Vibrant Red (#e63946) |
+| **Support Info** | Light Gray (#e0e0e0) | Pale Blue (#a8dadc) |
+| **Positive/Success** | Forest Green (#2a9d8f) | Mint Green (#f1faee) |
+| **Warning/Risk** | Amber (#ffb703) | Orange (#f4a261) |
+| **Action Items** | Indigo (#4cc9f0) | Purple (#7209b7) |
+
+## Examples
+
+### 1. Mind Map (Hand-drawn Hierarchical)
+```whiteboard
+{
+  "elements": [
+    {
+      "id": "m1", "type": "rectangle", "x": 500, "y": 300, "width": 150, "height": 60,
+      "backgroundColor": "#e63946", "roughness": 1.5, "roundness": { "type": 3 },
+      "boundElements": [{ "id": "t1", "type": "text" }, { "id": "a1", "type": "arrow" }]
+    },
+    { "id": "t1", "type": "text", "x": 500, "y": 300, "width": 150, "height": 60, "text": "Project Goal", "fontFamily": 5, "fontSize": 20, "textAlign": "center", "verticalAlign": "middle", "containerId": "m1", "strokeColor": "#ffffff" },
+    {
+      "id": "c1", "type": "rectangle", "x": 750, "y": 200, "width": 120, "height": 50,
+      "backgroundColor": "#a8dadc", "roughness": 1.5, "roundness": { "type": 3 },
+      "boundElements": [{ "id": "t2", "type": "text" }, { "id": "a1", "type": "arrow" }]
+    },
+    { "id": "t2", "type": "text", "x": 750, "y": 200, "width": 120, "height": 50, "text": "Task A", "fontFamily": 5, "fontSize": 16, "textAlign": "center", "verticalAlign": "middle", "containerId": "c1" },
+    {
+      "id": "a1", "type": "arrow", "x": 650, "y": 330, "points": [[0, 0], [100, -105]],
+      "startBinding": { "elementId": "m1", "fixedPoint": [1, 0.5] },
+      "endBinding": { "elementId": "c1", "fixedPoint": [0, 0.5] },
+      "elbowed": true, "roughness": 1.5
+    }
+  ]
+}
+```
+
+### 2. Relationship Map (Professional Clue Wall with Embeds)
+```whiteboard
+{
+  "elements": [
+    { "id": "clue-1", "type": "embeddable", "x": 100, "y": 100, "width": 250, "height": 180, "customData": { "blockId": 5501 }, "strokeColor": "#003049", "strokeWidth": 2, "validated": true, "link": "go to" },
+    { "id": "clue-2", "type": "embeddable", "x": 100, "y": 350, "width": 250, "height": 180, "customData": { "blockId": 5502 }, "strokeColor": "#003049", "validated": true, "link": "go to" },
+    { "id": "label-cat1", "type": "text", "x": 100, "y": 50, "text": "CATEGORY: SOURCES", "fontFamily": 6, "fontSize": 20, "strokeColor": "#003049" },
+
+    { "id": "clue-3", "type": "embeddable", "x": 600, "y": 100, "width": 250, "height": 180, "customData": { "blockId": 7701 }, "strokeColor": "#2a9d8f", "validated": true, "link": "go to" },
+    { "id": "label-cat2", "type": "text", "x": 600, "y": 50, "text": "CATEGORY: FINDINGS", "fontFamily": 6, "fontSize": 20, "strokeColor": "#2a9d8f" },
+
+    { "id": "link-1", "type": "arrow", "x": 350, "y": 190, "points": [[0,0], [250, 0]], "strokeStyle": "dashed", "strokeColor": "#ffb703" }
+  ]
+}
+```
