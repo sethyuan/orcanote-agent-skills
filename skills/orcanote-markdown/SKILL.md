@@ -89,7 +89,7 @@ Note: Spaces must be URL-encoded as `%20` in Markdown links.
 
 ```markdown
 > [!note]
-> This is a note callout.
+> This is a notice callout.
 ```
 
 ### Nested Callouts

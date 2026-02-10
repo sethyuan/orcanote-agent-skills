@@ -196,6 +196,28 @@ Assign colors based on the role of the element:
 | **Warning/Risk** | Amber (#ffb703) | Orange (#f4a261) |
 | **Action Items** | Indigo (#4cc9f0) | Purple (#7209b7) |
 
+## Post-Generation Validation
+
+After generating the `whiteboard` code block, you **MUST** perform a self-validation check to ensure the JSON is syntactically correct and semantically valid.
+
+### Validation Checklist
+- **JSON Integrity**: Ensure the output is a valid JSON object wrapped in a `whiteboard` code block.
+- **Unique IDs**: Verify that every element in the `elements` array has a unique `id`.
+- **Text Containers**: For every `text` element with a `containerId`, verify that:
+    - The `containerId` matches the `id` of an existing shape.
+    - The shape's `boundElements` array includes the `text` element's ID.
+- **Arrow Bindings**: For every `arrow` element with `startBinding` or `endBinding`:
+    - The `elementId` in the binding exists in the `elements` array.
+    - The `fixedPoint` is an array of two numbers between 0 and 1 (e.g., `[0.5, 0.5]`).
+    - The target shape's `boundElements` includes the `arrow` element's ID.
+- **Embeddable Blocks**: Verify that every `embeddable` element has:
+    - `customData.blockId` (a number).
+    - `validated: true`.
+    - `link: "go to"`.
+- **Styles**: Ensure only the allowed `fontSize` (16, 20, 28, 36) and `fontFamily` (5, 6, 8) are used.
+
+If any check fails, correct the JSON before providing the final response.
+
 ## Examples
 
 ### 1. Mind Map (Hand-drawn Hierarchical)
