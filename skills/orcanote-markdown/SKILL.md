@@ -62,6 +62,7 @@ Common characters to escape: `\*`, `\_`, `\#`, `` \` ``, `\|`, `\~`
 
 ```markdown
 [[BlockID]]
+[[Block Alias]]
 ```
 
 Block ID is a number.
