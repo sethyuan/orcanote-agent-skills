@@ -78,9 +78,9 @@ Note: Spaces must be URL-encoded as `%20` in Markdown links.
 ## Images, Videos & Audios
 
 ```markdown
-![Alt text](https://example.com/image.png)
-![Alt text](https://example.com/video.mp4)
-![Alt text](https://example.com/audio.mp3)
+![video](https://example.com/video)
+![audio](https://example.com/audio)
+![Image alt text](https://example.com/image.png)
 ```
 
 ## Callouts
