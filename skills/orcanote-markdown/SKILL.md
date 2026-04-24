@@ -84,6 +84,13 @@ Note: Spaces must be URL-encoded as `%20` in Markdown links.
 ![Image alt text](https://example.com/image.png)
 ```
 
+## Video/Audio Timestamps
+
+```markdown
+{01:59:59}
+{59:59}
+```
+
 ## Callouts
 
 ### Basic Callout
