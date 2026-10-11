@@ -307,8 +307,3 @@ graph LR
     B --> D[Cache]
 ```
 ````
-
-## References
-
-- See `orcanote-mermaid` skill for Mermaid syntax and more details.
-- See `orcanote-whiteboard` skill for whiteboard syntax (based on Excalidraw) and more details.
